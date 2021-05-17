@@ -170,7 +170,7 @@ elif [[ "$1" =~ ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$ ]]; then
     newBg="#lockDialogGroup {
 	background: $BgColor;
 	background-size: cover; }"
-    perl -i -0777 -pe "s/$oldBg/$newBg/s" "$workDir"/theme/gdm3.css
+    perl -i -0777 -pe "s/$oldBg/$newBg/s" "$workDir"/theme/gnome-shell.css
 
     # Generate the gresource xml file.
     echo '<?xml version="1.0" encoding="UTF-8"?>
