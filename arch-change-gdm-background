@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Autor: Thiago Silva
-# Contact: thiagos.dasilva@gmail.com
-# URL: https://github.com/thiggy01/change-gdm-background
+# Autor: Thiago Silva, Anirudh Gupta
+# Contact: thiagos.dasilva@gmail.com, anirudhgupta109@aosip.dev
+# URL: https://github.com/anirudhgupta109/arch-change-gdm-background
 # =================================================================== #
 
 # Check if script is run by root.
@@ -10,19 +10,12 @@ if [ "$(id -u)" -ne 0 ] ; then
     exit 1
 fi
 
-# Check what linux distro is being used.
-distro="$(lsb_release -c | cut -f 2)"
-if ! [[ "$distro" =~ (focal|groovy|hirsute) ]]; then
-    echo 'Sorry, this script only works with focal, groovy or hirsute distros.'
-    exit 1
-fi
-
 # Check if glib 2.0 development libraries are installed.
 if [ ! -x "$(command -v glib-compile-resources)" ]; then
     echo 'Additional glib 2.0 libraries need to be installed.'
     read -p 'Type y or Y to proceed. Any other key to exit: ' -n 1
     if [[ "$REPLY" =~ ^[yY]$ ]]; then
-	apt install libglib2.0-dev-bin
+	pacman -S glib2
     else
 	echo "This tool can't run without required libraries"
 	echo "Exiting."
@@ -32,11 +25,7 @@ if [ ! -x "$(command -v glib-compile-resources)" ]; then
 fi
 
 # Assign the default gdm theme file path.
-if [ "$(lsb_release -i | awk '{print $3}')" == 'Ubuntu' ]; then
-    gdm3Resource=/usr/share/gnome-shell/theme/Yaru/gnome-shell-theme.gresource
-elif [ "$(lsb_release -i | awk '{print $3}')" == 'Pop' ]; then
-    gdm3Resource=/usr/share/gnome-shell/theme/Pop/gnome-shell-theme.gresource
-fi
+gdm3Resource=/usr/share/gnome-shell/gnome-shell-theme.gresource
 
 # Create a backup file of the original theme if there isn't one.
 [ ! -f "$gdm3Resource"~ ] && cp "$gdm3Resource" "$gdm3Resource~"
@@ -50,7 +39,7 @@ if [ "$?" -eq 0 ]; then
     read -p 'Do you want to restart gdm to apply change? (y/n):' -n 1
 	echo
 	if [[ "$REPLY" =~ ^[yY]$ ]]; then
-	    service gdm restart
+	    systemctl restart gdm
 	else
 	    echo 'Restart GDM service to apply change.'
 	    exit 0
@@ -103,7 +92,7 @@ if [ "$?" -eq 0 ]; then
     echo
     # If change was successful apply ask for gdm restart.
     if [[ "$REPLY" =~ ^[yY]$ ]]; then
-	service gdm restart
+	systemctl restart gdm
     else
 	echo "Change will be applied only after restarting gdm"
 	echo
@@ -141,7 +130,7 @@ if [[ $(file --mime-type -b "$1") == image/*g ]]; then
     newBg="#lockDialogGroup {
 	background: url('resource:\/\/\/org\/gnome\/shell\/theme\/$imgFile');
 	background-size: cover; }"
-    perl -i -0777 -pe "s/$oldBg/$newBg/s" "$workDir"/theme/gdm3.css
+    perl -i -0777 -pe "s/$oldBg/$newBg/s" "$workDir"/theme/gnome-shell.css
 
     # Generate gresource xml file.
     echo '<?xml version="1.0" encoding="UTF-8"?>
@@ -209,7 +198,7 @@ else
     # show this message.
     echo 'Image file not found or wrong color hex code.'
     echo 'Please, submit a .jpg or .png image file or a valid hex code.'
-    echo 'Usage: sudo ./ubuntu-20.04-change-gdm-background /path/to/image.*g'
-    echo 'Usage: sudo ./ubuntu-20.04-change-gdm-background \#yourhexcode'
+    echo 'Usage: sudo ./arch-change-gdm-background /path/to/image.*g'
+    echo 'Usage: sudo ./arch-change-gdm-background \#yourhexcode'
 
 fi
