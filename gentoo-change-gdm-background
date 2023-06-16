@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Autor: Thiago Silva, Anirudh Gupta
-# Contact: thiagos.dasilva@gmail.com, anirudhgupta109@aosip.dev
-# URL: https://github.com/anirudhgupta109/arch-change-gdm-background
+# Authors: Thiago Silva, Anirudh Gupta, Loatchi
+# Contacts: thiagos.dasilva@gmail.com, anirudhgupta109@aosip.dev, None
+# URL: https://github.com/Loatchi/gentoo-change-gdm-background
 # =================================================================== #
 
 # Check if script is run by root.
@@ -127,7 +127,8 @@ if [[ $(file --mime-type -b "$1") == image/*g ]]; then
 
     # Change gdm background to the image you submited.
     oldBg="#lockDialogGroup \{.*?\}"
-    newBg="#lockDialogGroup {
+    newBg=".login-dialog,
+    #lockDialogGroup {
 	background: url('resource:\/\/\/org\/gnome\/shell\/theme\/$imgFile');
 	background-size: cover; }"
     perl -i -0777 -pe "s/$oldBg/$newBg/s" "$workDir"/theme/gnome-shell.css
