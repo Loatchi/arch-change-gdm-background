@@ -24,7 +24,7 @@ scape them with backslashes.
 First, you will need to install with `pacman -S glib2`
 Then, you can download the script with the command below:
 ```
-wget -O arch-change-gdm-background github.com/anirudhgupta109/gentoo-change-gdm-background/raw/master/gentoo-change-gdm-background
+wget -O arch-change-gdm-background github.com/Loatchi/gentoo-change-gdm-background/raw/master/gentoo-change-gdm-background
 ```
 And set it as an executable with `chmod +x arch-change-gdm-background`
 
